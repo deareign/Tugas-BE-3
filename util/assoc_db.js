@@ -33,8 +33,8 @@ User.belongsTo(Division);
 const association = async()=>{
   try {
     await my_db.sync({force: false});
-    // Division.bulkCreate(divisi_itc);
-    // await User.create(admin);
+     //Division.bulkCreate(divisi_itc);
+     //await User.create(admin);
   } catch (error) {
     console.log(error.message);
   }

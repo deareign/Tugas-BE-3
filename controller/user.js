@@ -208,17 +208,50 @@ const deleteUser = async(req,res,next)=>{
   }
 }
 
-//TODO 1
-const getUserByToken = async(req,res,next)=>{
-  //tugas lengkapi codingan
-  //hanya user yang telah login bisa mengambil data dirinya dengan mengirimkan token
-  //step 1 ambil token
+// TODO 1
+const getUserByToken = async (req, res, next) => {
+  try {
 
+    const header = req.headers;
+    const authorization = header.authorization;
 
-  //step 2 ekstrak payload menggunakan jwt.verify
+    if (authorization !== undefined && authorization.startsWith("Bearer ")) {
+      token = authorization.substring(7);
 
-  //step 3 cari user berdasarkan payload.userId
-}
+      const decoded = jwt.verify(token, key);
+
+      const user = await User.findByPk(decoded.userId, {
+        attributes: ['id', 'fullName', 'nim', 'angkatan', 'profilePicture', 'divisionId'],
+        include: {
+          model: Division,
+          attributes: ['name']
+        }
+      });
+
+      if (!user) {
+        const error = new Error("User not found");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      res.status(200).json({
+        status: "Success",
+        message: "Successfully fetch user data by token",
+        user: user
+      });
+    } else {
+      const error = new Error("Invalid token");
+      error.statusCode = 401;
+      throw error;
+    }
+  } catch (error) {
+    res.status(error.statusCode || 500).json({
+      status: "Error",
+      message: error.message
+    });
+  }
+};
+
 
 module.exports = {
   getAllUser, getUserById, postUser, deleteUser, loginHandler, getUserByToken

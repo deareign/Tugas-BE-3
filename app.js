@@ -14,11 +14,11 @@ app.use(express.json());
 //jalanin router
 app.use(userRouter);
 
-app.use("/", (req,res,next)=>{
-  res.status(404).json({
-    message: "Resource not found!"
-  })
-})
+// app.use("/", (req,res,next)=>{
+//   res.status(404).json({
+//     message: "Resource not found!"
+//   })
+// })
 
 //ambil data dari dotenv
 const PORT = process.env.PORT;
