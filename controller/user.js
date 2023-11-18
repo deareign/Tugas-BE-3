@@ -214,6 +214,7 @@ const getUserByToken = async (req, res, next) => {
 
     const header = req.headers;
     const authorization = header.authorization;
+    let token;
 
     if (authorization !== undefined && authorization.startsWith("Bearer ")) {
       token = authorization.substring(7);
